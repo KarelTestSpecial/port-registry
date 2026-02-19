@@ -1,0 +1,47 @@
+{
+  "_comment": "Centraal poortenregister \u2014 enige bron van waarheid voor alle poorten op deze machine.",
+  "_bootstrap_port": 4444,
+  "services": {
+    "port-registry": {
+      "port": 4444,
+      "project": "port-registry",
+      "description": "Het register zelf (bootstrap)"
+    },
+    "clawwork-frontend": {
+      "port": 3000,
+      "project": "clawwork",
+      "description": "ClawWork frontend dashboard"
+    },
+    "clawwork-backend": {
+      "port": 8000,
+      "project": "clawwork",
+      "description": "ClawWork API / LiveBench"
+    },
+    "clawwork-mcp": {
+      "port": 8010,
+      "project": "clawwork",
+      "description": "ClawWork MCP service"
+    },
+    "aiga-api": {
+      "port": 8001,
+      "project": "karelsassistant",
+      "description": "AIGA backend API (verplaatst van 8000)"
+    },
+    "central-ai-waterfall": {
+      "port": 5005,
+      "project": "karelsassistant",
+      "description": "Gecentraliseerde AI waterfall (OpenAI compat.)"
+    },
+    "master-dashboard": {
+      "port": 3002,
+      "project": "master-dashboard",
+      "description": "Centraal master dashboard (Gemini)"
+    },
+    "pmctl": {
+      "port": 7777,
+      "project": "pmctl",
+      "description": "pmctl web dashboard"
+    }
+  },
+  "next_available": 8004
+}
