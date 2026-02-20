@@ -24,7 +24,7 @@ from typing import Optional
 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, HTMLResponse
 from pydantic import BaseModel
 
 REGISTRY_FILE = Path(__file__).parent / "registry.json"
@@ -75,17 +75,48 @@ class ReleaseBody(BaseModel):
 
 
 # ── Routes ────────────────────────────────────────────────────────────────────
-@app.get("/")
+@app.get("/", response_class=HTMLResponse)
 def root():
     data = load()
-    return {
-        "name": "Port Registry",
-        "bootstrap_port": BOOTSTRAP_PORT,
-        "registered_services": len(data["services"]),
-        "next_available": data.get("next_available"),
-        "docs": f"http://localhost:{BOOTSTRAP_PORT}/docs",
-        "ports": f"http://localhost:{BOOTSTRAP_PORT}/ports",
-    }
+    services_html = "".join([
+        f"<li><strong>{name}</strong>: <a href='http://localhost:{info['port']}'>:{info['port']}</a> ({info['project']})</li>"
+        for name, info in data["services"].items()
+    ])
+    
+    html_content = f"""
+    <html>
+        <head>
+            <title>⚓ Port Registry</title>
+            <style>
+                body {{ font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; line-height: 1.6; max-width: 800px; margin: 40px auto; padding: 20px; background: #f8f9fa; color: #212529; }}
+                h1 {{ color: #0d6efd; border-bottom: 2px solid #0d6efd; padding-bottom: 10px; display: flex; align-items: center; gap: 10px; }}
+                .status {{ background: #e7f1ff; padding: 15px; border-radius: 8px; border-left: 5px solid #0d6efd; margin-bottom: 20px; }}
+                ul {{ list-style-type: none; padding: 0; }}
+                li {{ background: #fff; margin: 8px 0; padding: 12px; border-radius: 6px; box-shadow: 0 1px 2px rgba(0,0,0,0.05); border: 1px solid #dee2e6; }}
+                a {{ color: #0d6efd; text-decoration: none; font-weight: 600; }}
+                a:hover {{ text-decoration: underline; }}
+                .footer {{ margin-top: 40px; font-size: 0.85em; color: #6c757d; border-top: 1px solid #dee2e6; padding-top: 20px; }}
+                .badge {{ background: #0d6efd; color: white; padding: 2px 8px; border-radius: 10px; font-size: 0.8em; font-weight: bold; }}
+            </style>
+        </head>
+        <body>
+            <h1>⚓ Port Registry</h1>
+            <div class="status">
+                <p>Bootstrap Port: <strong>{BOOTSTRAP_PORT}</strong></p>
+                <p>Registered Services: <span class="badge">{len(data["services"])}</span></p>
+                <p>API Documentation: <a href="/docs">/docs</a></p>
+            </div>
+            <h2>Geregistreerde Services</h2>
+            <ul>
+                {services_html}
+            </ul>
+            <div class="footer">
+                Karel's Assistant Ecosystem &mdash; Centralized Port Management
+            </div>
+        </body>
+    </html>
+    """
+    return HTMLResponse(content=html_content)
 
 
 @app.get("/ports")
