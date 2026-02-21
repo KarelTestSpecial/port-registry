@@ -32,16 +32,31 @@
       "project": "karelsassistant",
       "description": "Gecentraliseerde AI waterfall (OpenAI compat.)"
     },
-    "master-dashboard": {
+    "kdc-dashboard": {
       "port": 3002,
-      "project": "master-dashboard",
-      "description": "Centraal master dashboard (Gemini)"
+      "project": "kdc-dashboard",
+      "description": "Centraal KDC dashboard (Gemini)"
     },
     "pmctl": {
       "port": 7777,
       "project": "pmctl",
       "description": "pmctl web dashboard"
+    },
+    "athena-dock": {
+      "port": 5002,
+      "project": "athena",
+      "description": "Athena CMS Dock \u2014 visuele editor"
+    },
+    "athena-dashboard": {
+      "port": 6041,
+      "project": "athena",
+      "description": "Athena CMS Dashboard"
+    },
+    "athena-sites": {
+      "port": 5089,
+      "project": "athena",
+      "description": "Athena site previews \u2014 range 5089-6106 (beheerd door athena pm-cli)"
     }
   },
-  "next_available": 8004
+  "next_available": 5090
 }
